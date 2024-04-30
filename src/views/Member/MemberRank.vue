@@ -1,14 +1,10 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+    <div>占位符</div>
 </template>
 
 <script>
-
-
 export default {
-  name: 'App'
+    name:'MemberRank',
 }
 </script>
 
