@@ -4,6 +4,7 @@
     import login from '@/views/login'
     import MemberList from '@/views/Member/MemberList'
     import MemberRank from '@/views/Member/MemberRank'
+    import NotFound from '@/views/Errors/NotFound'
 
     Vue.use(Router)
 
@@ -42,6 +43,10 @@
             {
                 path: '/goHome/:name', // 表示路由跳转路径
                 redirect: '/Homepage/:name',
+            },
+            {
+                path: '*', // 跳转404页面
+                component: NotFound
             },
         ]
     })

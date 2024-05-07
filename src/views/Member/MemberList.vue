@@ -1,5 +1,5 @@
 <template>
-  <div>占位符</div>
+  <div>占位符1</div>
 </template>
 
 <script>
