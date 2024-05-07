@@ -54,7 +54,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$router.push("/HomePage");
+          this.$router.push({name:'Homepage',params:{name:this.form.name}});
         } else {
           this.$message({
             message: "请输入正确的用户名与密码",

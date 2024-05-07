@@ -24,7 +24,9 @@
             <template slot="title"><i class="el-icon-menu"></i>导航二</template>
             <el-menu-item-group>
               <template slot="title">分组一</template>
-              <el-menu-item index="2-1">选项1</el-menu-item>
+              <el-menu-item index="2-1">
+                <router-link to="/goHome/yykkrr">回到首页</router-link>
+              </el-menu-item>
               <el-menu-item index="2-2">选项2</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="分组2">
@@ -45,7 +47,9 @@
                 <router-link to="/member/list">好友列表</router-link>
               </el-menu-item>
               <el-menu-item index="3-2">
-                <router-link to="/member/rank">好友排名</router-link>
+                <router-link :to="{ name: 'MemberRank', params: { id: 3 } }"
+                  >好友排名</router-link
+                >
               </el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="分组2">
@@ -65,15 +69,17 @@
             <i class="el-icon-setting" style="margin-right: 15px"></i>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>xxxx1</el-dropdown-item>
-              <el-dropdown-item>退出登陆</el-dropdown-item>
+              <el-dropdown-item>
+                <router-link to="/goLogin">退出登录</router-link>
+              </el-dropdown-item>
               <el-dropdown-item>xxxx2</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <span>admin</span>
+          <span>{{ $route.params.name }}</span>
         </el-header>
 
         <el-main>
-          <router-view></router-view>
+          <router-view>123</router-view>
         </el-main>
       </el-container>
     </el-container>
