@@ -4,16 +4,16 @@
       <el-aside width="260px">
         <el-menu :default-openeds="['1']">
           <el-submenu index="1">
-            <template slot="title"
-              ><i class="el-icon-message"></i>导航一</template
-            >
+            <template slot="title"><i class="el-icon-message"></i>导航一</template>
             <el-menu-item-group>
               <template slot="title">分组一</template>
               <el-menu-item index="1-1">选项1</el-menu-item>
               <el-menu-item index="1-2">选项2</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
+              <el-menu-item index="1-3">
+                <router-link :to="{ name: 'EditEssay', params: { name: userName } }">修改作文</router-link>
+              </el-menu-item>
             </el-menu-item-group>
             <el-submenu index="1-4">
               <template slot="title">选项4</template>
@@ -24,8 +24,8 @@
             <template slot="title"><i class="el-icon-menu"></i>导航二</template>
             <el-menu-item-group>
               <template slot="title">分组一</template>
-              <el-menu-item index="2-1">
-                <router-link to="/goHome/yykkrr">回到首页</router-link>
+              <el-menu-item>
+                <router-link :to="{ name: 'MemberList', params: { name: userName } }">回到首页</router-link>
               </el-menu-item>
               <el-menu-item index="2-2">选项2</el-menu-item>
             </el-menu-item-group>
@@ -38,18 +38,14 @@
             </el-submenu>
           </el-submenu>
           <el-submenu index="3">
-            <template slot="title"
-              ><i class="el-icon-setting"></i>用户中心</template
-            >
+            <template slot="title"><i class="el-icon-setting"></i>用户中心</template>
             <el-menu-item-group>
               <template slot="title">好友中心 </template>
-              <el-menu-item index="3-1">
-                <router-link to="/member/list">好友列表</router-link>
+              <el-menu-item>
+                <router-link :to="{ name: 'MemberList', params: { name: userName } }">好友列表</router-link>
               </el-menu-item>
-              <el-menu-item index="3-2">
-                <router-link :to="{ name: 'MemberRank', params: { id: 3 } }"
-                  >好友排名</router-link
-                >
+              <el-menu-item>
+                <router-link :to="{ name: 'MemberRank', params: { id: 3, name: userName } }">好友排名</router-link>
               </el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="分组2">
@@ -75,11 +71,11 @@
               <el-dropdown-item>xxxx2</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <span>{{ $route.params.name }}</span>
+          <span>{{ userName }}</span>
         </el-header>
 
         <el-main>
-          <router-view>123</router-view>
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -89,6 +85,12 @@
 <script>
 export default {
   name: "HomePage",
+  props: ['name'],
+  computed: {
+    userName() {
+      return this.name || this.$route.params.name;
+    }
+  }
 };
 </script>
 
