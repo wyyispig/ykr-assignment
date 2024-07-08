@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <style>
+      body,
+      html {
+        margin: 0;
+      }
+
+      html {
+        height: 100%;
+      }
+
+      body {
+        height: inherit;
+        overflow: hidden;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      h1,
+      p {
+        font-family: sans-serif;
+        text-align: center;
+        padding: 20px;
+      }
+
+      div {
+        height: 100px;
+        overflow: auto;
+        position: absolute;
+        bottom: 0px;
+        right: 0;
+        left: 0;
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      ul {
+        margin: 0;
+      }
+
+      .hints span {
+        text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>语音识别转换器</h1>
+    <p class="hints"></p>
+    <div>
+      <p class="output"><em>识别进度展示处</em></p>
+    </div>
+  </body>
+  <script>
+    var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+    var SpeechGrammarList = SpeechGrammarList || window.webkitSpeechGrammarList;
+    var SpeechRecognitionEvent =
+      SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+
+    var colors = [
+      "aqua",
+      "azure",
+      "beige",
+      "bisque",
+      "black",
+      "blue",
+      "brown",
+      "chocolate",
+      "coral",
+      "crimson",
+      "cyan",
+      "fuchsia",
+      "ghostwhite",
+      "gold",
+      "goldenrod",
+      "gray",
+      "green",
+      "indigo",
+      "ivory",
+      "khaki",
+      "lavender",
+      "lime",
+      "linen",
+      "magenta",
+      "maroon",
+      "moccasin",
+      "navy",
+      "olive",
+      "orange",
+      "orchid",
+      "peru",
+      "pink",
+      "plum",
+      "purple",
+      "red",
+      "salmon",
+      "sienna",
+      "silver",
+      "snow",
+      "tan",
+      "teal",
+      "thistle",
+      "tomato",
+      "turquoise",
+      "violet",
+      "white",
+      "yellow",
+    ];
+
+    var recognition = new SpeechRecognition();
+    if (SpeechGrammarList) {
+      var speechRecognitionList = new SpeechGrammarList();
+      var grammar =
+        "#JSGF V1.0; grammar colors; public <color> = " +
+        colors.join(" | ") +
+        " ;";
+      speechRecognitionList.addFromString(grammar, 1);
+      recognition.grammars = speechRecognitionList;
+    }
+    recognition.continuous = false;
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    var bg = document.querySelector("html");
+    var hints = document.querySelector(".hints");
+    var diagnostic = document.querySelector(".output");
+    var colorHTML = "";
+    colors.forEach(function (v, i, a) {
+      colorHTML +=
+        '<span style="background-color:' + v + ';"> ' + v + " </span>";
+    });
+    hints.innerHTML =
+      "点击页面，然后说出一种颜色来更改页面背景色" + "</br>" + colorHTML + ".";
+
+    let flag = false;
+    document.body.onclick = function () {
+      if (flag) return;
+      flag = true;
+      recognition.start();
+      console.log("正识别中...");
+      diagnostic.textContent = "正识别中...";
+    };
+
+    recognition.onresult = function (event) {
+      var color = event.results[0][0].transcript;
+      bg.style.backgroundColor = color;
+      flag = false;
+      // console.log('Confidence: ' + event.results[0][0].confidence)
+      console.log("识别成功，结果是:", color);
+      diagnostic.textContent = "识别成功，结果是: " + color + ".";
+    };
+
+    recognition.onspeechend = function () {
+      recognition.stop();
+      flag = false;
+      console.log("识别结束");
+    };
+
+    recognition.onnomatch = function (event) {
+      flag = false;
+      console.log("识别成功，但是没有认出您说的颜色");
+      diagnostic.textContent = "识别成功，但是没有认出您说的颜色";
+    };
+
+    recognition.onerror = function (event) {
+      flag = false;
+      let msg = event.error == "not-allowed" ? "没有麦克风权限" : event.error;
+      console.log("识别错误，原因是：", msg);
+      diagnostic.textContent = "识别错误，原因是：" + msg;
+    };
+  </script>
+</html>
