@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <button id="start">Start</button>
+    <button id="stop">End</button>
+    <script>
+      const url = "http://127.0.0.1:5000";
+      let mediaRecorder;
+      let audioChunks = [];
+
+      document.getElementById("start").addEventListener("click", () => {
+        navigator.mediaDevices
+          .getUserMedia({ audio: true })
+          .then((stream) => {
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+            mediaRecorder.start();
+          })
+          .catch(console.error);
+      });
+
+      document.getElementById("stop").addEventListener("click", () => {
+        mediaRecorder.stop();
+        const audioBlob = new Blob(audioChunks);
+        const formData = new FormData();
+        formData.append("audio", audioBlob);
+
+        fetch(url + "/upload", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data))
+          .catch((error) => console.error("Error:", error));
+      });
+    </script>
+  </body>
+</html>

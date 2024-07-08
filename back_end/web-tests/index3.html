@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>语音转文字</title>
+    <style>
+      textarea {
+        width: 100%;
+        height: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <textarea
+        shape=""
+        coords=""
+        href=""
+        alt=""
+        id="area"
+        placeholder="请说点什么..."
+      ></textarea>
+      <button id="speek">麦克风</button>
+      <button id="addBtn">发布</button>
+      <ul id="text"></ul>
+    </div>
+
+    <script>
+      window.onload = () => {
+        console.log("页面加载完毕");
+        const area = document.querySelector("#area");
+        const speek = document.querySelector("#speek");
+        const addBtn = document.querySelector("#addBtn");
+        const text = document.querySelector("#text");
+        const recognition = new webkitSpeechRecognition();
+        let isSpeek = false;
+
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = "zh-CN";
+        recognition.onresult = function (event) {
+          let result = "";
+          for (let i = event.resultIndex; i <= event.resultIndex; i++) {
+            if (event.results[i].isFinal) {
+              result += event.results[i][0].transcript;
+            }
+          }
+          area.value = result;
+        };
+
+        speek.addEventListener("click", () => {
+          if (isSpeek) {
+            recognition.stop();
+            isSpeek = false;
+            return;
+          }
+          recognition.start();
+          isSpeek = true;
+        });
+
+        addBtn.addEventListener("click", () => {
+          const li = document.createElement("li");
+          li.textContent = area.value;
+          text.appendChild(li);
+          area.value = "";
+        });
+      };
+    </script>
+  </body>
+</html>

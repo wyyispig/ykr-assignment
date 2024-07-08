@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Speech Recognition Example</title>
+  </head>
+  <body>
+    <button id="start-btn">START</button>
+    <button id="start-btn">END</button>
+
+    <script>
+      const Recognition = webkitSpeechRecognition;
+      const recognition = new Recognition();
+      recognition.continuous = true;
+      recognition.onresult = function (e) {
+        console.log(e);
+      };
+      recognition.onsoundstart = function (e) {
+        console.log("开始收听了");
+        console.log(e);
+      };
+      recognition.onspeechstart = (e) => {
+        console.log("开始讲话了");
+        console.log(e);
+      };
+      recognition.onspeechend = (e) => {
+        console.log("讲话完毕");
+        console.log(e);
+      };
+      recognition.onerror = (e) => {
+        console.log("发生异常");
+        console.log(e);
+      };
+    </script>
+  </body>
+</html>
